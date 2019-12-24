@@ -1,1 +1,19 @@
-{"_default": {"1": {"ap": 3, "description": "some description", "name": "some name"}, "2": {"ap": 3, "description": "some description", "name": "some name"}}}
+{
+    "_default":{
+      "1": {"ap": 2,"name": "Quick Hands","description": "+1 to Parry","quantity": 0,"effect": [{"Parry": 1}]},
+      "2": {"ap": -1,"name": "Poor Reaction Time","description": "-1 to Parry","quantity": 0,"effect": [{"Parry": -1}]},
+      "3": {"ap": 3,"name": "Thick Skin","description": "+1 to base Toughnesses","quantity": 0,"effect": [{"Toughness": 1}]},
+      "4": {"ap": -2,"name": "Small Bones","description": "-1 to base Toughnesses","quantity": 0,"effect": [{"Toughness": -1}]},
+      "5": {"ap": 2,"name": "Occlumency","description": "+1 to Lucidity","quantity": 0,"effect": [{"Lucidity": 1}]},
+      "6": {"ap": -1,"name": "Out of Touch","description": "-1 to Lucidity","quantity": 0,"effect": [{"Lucidity": -1}]},
+      "7": {"ap": 1,"name": "Alert","description": "Awareness +1","quantity": 0,"effect": [{"Awareness": 1}]},
+      "8": {"ap": -1,"name": "Clueless","description": "Awareness -1","quantity": 0,"effect": [{"Awareness": -1}]},
+      "9": {"ap": 4,"name": "Endurance","description": "Health +5","quantity": 0,"effect":  [{"Health": 5}]},
+      "10": {"ap": -4,"name": "Small Frame","description": "Health -5","quantity": 0,"effect":  [{"Health": -5}]},
+      "11": {"ap": 2,"name": "Blessed","description": "+1 Luck","quantity": 0,"effect": [{"Luck": 1}]},
+      "12": {"ap": -2,"name": "Cursed","description": "-1 Luck","quantity": 0,"effect": [{"Luck": -1}]},
+      "13": {"ap": 3,"name": "Mana Pool","description": "Increase total mana by 10 mana","quantity": 0,"effect": [{"Mana": 10}]},
+      "14": {"ap": 3,"name": "Mana Flow","description": "Increase mana regeneration per round by 1 ","quantity": 0,"effect": [{"Mana Regeneration": 1}]}
+  }
+  }
+  
