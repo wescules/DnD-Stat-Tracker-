@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <h1>Fuel Quote Form</h1>
+  {% from "includes/_formhelpers.html" import render_field %}
+  <form method="POST" action="">
+    <div class="form-group">
+      {{ render_field(form.gallons_requested, class_="form-control") }}
+    </div>
+    <div>
+      <strong>
+          Delivery Address: 
+      </strong>
+      {{ article.address1 }}
+      <br></br>
+    </div>
+    <div class="input-field col s6" autocomplete="off">
+      <strong>
+          Delivery Date:
+      </strong>
+        {{ form.dt(class="dtpick") }}
+      </div>
+      <br></br>
+    <div class="form-group" title="Current Price + (Current Price * (Location Factor - Rate History Factor + Gallons Requested Factor + Company Profit Factor + Rate Fluctuation))">
+        <strong>
+          <p align="right">Suggested Price (hover for equation):
+        </strong> 
+         = {{ PricePerGallon }}  + ( {{ PricePerGallon }} *  ({{ Transportation }} - {{ clientratehistory }} + {{ GallonsRequestedFactor }} + 0.1 + {{ SeasonFluctuation }}))       
+        {{ PricePerGallon }} * {{ gallonsrequested }} = <font color="red">$ {{ SuggestedPrice }}</font></p>
+    </div>
+      <div class="form-group">
+        <strong>
+          <p align="right">Total Amount Due: 
+        </strong>
+        {{ gallonsrequested }} * {{ SuggestedPrice }} = 
+        <font color="red">$ {{ FuelPrice }}</font>
+      </p>
+    </div>
+    <p align="right"><input class="btn btn-primary" type="submit" value="GetPrice" name="action">
+    <input class="btn btn-primary" type="submit" value="SubmitQuote" name="action">
+  </form>
+{% endblock %}
