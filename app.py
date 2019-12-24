@@ -1,6 +1,7 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request, logging
 from ast import literal_eval
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
+from passlib.hash import sha256_crypt
 from functools import wraps
 from tinydb import TinyDB, Query
 
@@ -76,7 +77,8 @@ def login():
         # Get user by username
         User = Query()
         result = users.search(User.username == username)
-        if result > 0:
+        print(result)
+        if len(result) > 0:
             # Get stored hash
             password = getFieldData("password", result)[0]
             # Compare Passwords
