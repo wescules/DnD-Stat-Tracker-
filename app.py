@@ -10,6 +10,8 @@ characters = TinyDB('characters.json')
 traits = TinyDB('traits.json')
 baseStats = TinyDB('baseStats.json')    # Never update base traits. This is for read only
 app = Flask(__name__)
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SECRET_KEY'] = 'super secret key'
 
 # Config MySQL
 # app.config['MYSQL_HOST'] = 'wandrade1.mysql.pythonanywhere-services.com'
@@ -286,7 +288,6 @@ def character_sheet(id):
     return render_template('character.html', columns=columns, id=id)
 
 if __name__ == '__main__':
-    app.secret_key='secret123'
     app.run(debug=True)
     
 #sudo apt-get install mysql-server
