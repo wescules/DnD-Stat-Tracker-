@@ -134,7 +134,7 @@ def dashboard():
     ids = getIds(result)
     data = zip(names, ids)
 
-    if result > 0:
+    if len(result) > 0:
         return render_template('dashboard.html', data=data)
     else:
         msg = 'No Articles Found'
