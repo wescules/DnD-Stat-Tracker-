@@ -6,12 +6,7 @@
 4. pip install flask_mysqldb
 5. pip install wtforms
 6. pip install passlib
- # *create database*
- 1. mysql -u root -p 
- 2. (set password to 'root')
- 3. create database myflaskapp;
- 4. mysql -u root -proot myflaskapp < admin_backup.sql
- # Running the app
+7. pip install tinydb
 ```
 python app.py
 ```
