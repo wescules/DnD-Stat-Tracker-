@@ -1,0 +1,5 @@
+{
+    "_default":{
+      "1": {"parry": 0, "toughness": 2, "lucidity": 0, "awareness": 2, "health": 30, "luck": 3, "mana": 20, "mana regeneration": 2}
+  }
+  }

@@ -1,16 +1,1 @@
-{
-	"_default": {
-		"1": {
-			"username": "wescules",
-			"name": "haha",
-			"backgroundInfo": "123123",
-			"age": "123",
-			"weight": "123",
-			"height": "123",
-			"eyeColor": "123",
-			"race": "123",
-			"hairColor": "123",
-			"sex": "mal"
-		}
-	}
-}
+{"_default": {"1": {"username": "wescules", "name": "haha", "backgroundInfo": "123123", "age": "123", "weight": "123", "height": "123", "eyeColor": "123", "race": "123", "hairColor": "123", "sex": "mal"}, "2": {"username": "wescules", "stats": {"toughness": 2, "parry": "20", "mana": 20, "health": 30, "lucidity": "10", "mana regeneration": 2, "awareness": 2, "luck": 3}, "name": "asdfadsf", "backgroundInfo": "asdfasdasdasd123e", "age": "asdf", "weight": "asf", "height": "asdf", "eyeColor": "asdf", "race": "asdf", "hairColor": "asdf", "sex": "asdf"}}}

@@ -1,4 +1,5 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request, logging
+from ast import literal_eval
 #from data import Articles
 from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
@@ -9,6 +10,7 @@ from tinydb import TinyDB, Query
 users = TinyDB('users.json')
 characters = TinyDB('characters.json')
 traits = TinyDB('traits.json')
+baseStats = TinyDB('baseStats.json')    # Never update base traits. This is for read only
 app = Flask(__name__)
 
 # Config MySQL
@@ -61,7 +63,7 @@ def register():
     return render_template('register.html', form=form)
 
 def getFieldData(fieldName, query):
-    result = [r[fieldName] for r in query]
+    result = [str(r[fieldName]) for r in query]
     return result
 
 def getIds(query):
@@ -166,7 +168,8 @@ def add_article():
         eyeColor = form.eyeColor.data
         hairColor = form.hairColor.data
         backgroundInfo = form.backgroundInfo.data
-        characters.insert({'name': name, 'sex': sex, 'race': race, 'username': session['username'], 'age':age, 'height': height,'weight':weight, 'eyeColor':eyeColor, "hairColor":hairColor, "backgroundInfo": backgroundInfo})
+        stats = getDocumentById(1, baseStats.all())[0]
+        characters.insert({'name': name, 'stats':stats, 'sex': sex, 'race': race, 'username': session['username'], 'age':age, 'height': height,'weight':weight, 'eyeColor':eyeColor, "hairColor":hairColor, "backgroundInfo": backgroundInfo})
         flash('Character Created', 'success')
         return redirect(url_for('dashboard'))
 
@@ -187,10 +190,7 @@ def edit_character(id):
 
     # populate page on GET
     # cant fucking query by id for some goddamn reason...
-    print(id)
     result = getDocumentById(id, characters.all())
-
-    print(result)
 
     form.name.data = getFieldData("name", result)[0]
     form.sex.data = getFieldData("sex", result)[0]
@@ -213,6 +213,7 @@ def edit_character(id):
         hairColor = request.form['hairColor']
         backgroundInfo = request.form['backgroundInfo']
 
+        # write back to json store because update structs are fucked
         for res in result:
             res['name'] = name
             res['sex'] = sex
@@ -227,27 +228,65 @@ def edit_character(id):
         flash('Character Updated', 'success')
         return redirect(url_for('dashboard'))
 
-    return render_template('edit_character.html', form=form)
+    return render_template('edit_character.html', form=form, id=id)
 
-# Add to traits
-@app.route('/add_traits/', methods=['GET', 'POST'])
+# Add traits to character
+# TODO on GET load quantity
+@app.route('/add_traits/<string:id>', methods=['GET', 'POST'])
 @is_logged_in
-def add_traits():
+def add_traits(id):
     
     # traits.insert({'ap': 3, 'description': 'some description', 'name': 'some name'})
-    # if request.method == 'POST' and form.validate():
+    character = getDocumentById(id, characters.all())[0]
+
     result = traits.all()
     ap = getFieldData("ap", result)
     description = getFieldData("description", result)
     name = getFieldData("name", result)
+    effect = getFieldData('effect', result)
 
-    columns = zip(ap, description, name)
-        
-    flash('Added Traits', 'success')
+    columns = zip(ap, description, name, effect)
+    if request.method == 'POST':
+        quantity = request.form['text']
+        effects = literal_eval(request.form['effect'])      # turn unicode to dict
 
-    return render_template('traits.html', columns=columns)
+        # update the character based on quantity of trait allocated
+        for key in effects:
+            character['stats'][key] = quantity * effects[key]
+        characters.write_back([character])
 
+        flash('Added Traits', 'success')
+        flash(character, 'success')
 
+    return render_template('traits.html', columns=columns, id=id)
+
+@app.route('/character_sheet/<string:id>', methods=['GET', 'POST'])
+@is_logged_in
+def character_sheet(id):
+    
+    # traits.insert({'ap': 3, 'description': 'some description', 'name': 'some name'})
+    character = getDocumentById(id, characters.all())[0]
+
+    result = traits.all()
+    ap = getFieldData("ap", result)
+    description = getFieldData("description", result)
+    name = getFieldData("name", result)
+    effect = getFieldData('effect', result)
+
+    columns = zip(ap, description, name, effect)
+    if request.method == 'POST':
+        quantity = request.form['text']
+        effects = literal_eval(request.form['effect'])      # turn unicode to dict
+
+        # update the character based on quantity of trait allocated
+        for key in effects:
+            character['stats'][key] = quantity * effects[key]
+        characters.write_back([character])
+
+        flash('Added Traits', 'success')
+        flash(character, 'success')
+
+    return render_template('character.html', columns=columns, id=id)
 
 if __name__ == '__main__':
     app.secret_key='secret123'

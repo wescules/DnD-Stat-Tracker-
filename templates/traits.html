@@ -2,6 +2,7 @@
 
 {% block body %}
 <h1>Add Traits to your Character</h1>
+  {% from "includes/_formhelpers.html" import render_field %}
     <table id="example" class="table table-striped">
     <tr>
       <th style="font-size: 15px">AP</th>
@@ -9,11 +10,20 @@
       <th style="font-size: 15px">Description</th>
       <th style="font-size: 15px">Quantity</th>
     </tr>
+
     {% for column in columns %}
       <tr>
         <td style="font-size: 16px">{{column[0]}}</td>
-        <td style="font-size: 16px">{{column[1]}}</td>
         <td style="font-size: 16px">{{column[2]}}</td>
+        <td style="font-size: 16px">{{column[1]}}</td>
+        <td style="font-size: 16px">
+        <form method="POST">
+          <input name="text" value=0>
+          <input type="hidden" name="effect" value="{{column[3]}}">
+          <input style="background-color:#f7b600; color:black" type="submit" value="Save" class="btn btn-danger">
+         </form>  
+        </td>
+         
         {# <td style="font-size: 16px">{{result.merchantName}}</td>
         <td style="font-size: 16px">{{result.amount}}</td>
         <td style="font-size: 16px">{{result.category}}</td>
@@ -25,9 +35,10 @@
           </form>
         </td> #}
       </tr>
+     
     {% endfor %}
     <tr>
-      <td><a href="/character_sheet/" class="btn btn-default pull-right">Go to Character Sheet</a></td>
+      <td><a href="/character_sheet/{{id}}" class="btn btn-default pull-right">Go to Character Sheet</a></td>
     </tr>
 
     </table>
