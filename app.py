@@ -1,7 +1,6 @@
 from flask import Flask, render_template, flash, redirect, url_for, session, request, logging
 from ast import literal_eval
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
-from passlib.hash import sha256_crypt
 from functools import wraps
 from tinydb import TinyDB, Query
 
@@ -18,8 +17,6 @@ app = Flask(__name__)
 # app.config['MYSQL_DB'] = 'wandrade1$myflaskapp'
 # app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 # init MYSQL
-mysql = MySQL(app)
-
 # Index
 @app.route('/')
 def index():
