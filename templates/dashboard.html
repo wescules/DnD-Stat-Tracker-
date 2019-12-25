@@ -5,7 +5,56 @@
     <h1> S0ul F0rg3<small> Welcome, {{session.username}}</small></h1>
     <hr>
     <p><strong></strong></p>
-    <table id="example" class="table table-striped">
+    <style>
+    @import url(https://fonts.googleapis.com/css?family=Orbitron:400,500,900,700);
+body {
+  font-family: 'Orbitron', sans-serif;
+}
+
+h2 {
+  color: green;
+  text-align: center;
+  font-size: 3em;
+}
+
+#character-container {
+  padding: 10px;
+  width: 1000px;
+  height: 600px;
+  background-color: rgba(0, 0, 0, 0.9);
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+#character-box {
+  width: 300px;
+  height: 370px;
+  float: left;
+  border-radius: 5px;
+  border: 1px solid black;
+  background-color: green;
+  background-image: url('http://vignette2.wikia.nocookie.net/simpsons/images/7/75/Mario.png/revision/latest?cb=20100202173945');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  box-sizing: border-box;
+  margin-right: 50px;
+}
+
+#character-container img {
+  height: 150px;
+  width: 100px;
+  border: 3px groove green;
+  padding: 10px;
+  margin: 2.5px;
+}
+
+#character-container img:hover {
+  border-color: blue;
+  box-shadow: 0 0 5px blue;
+}
+</style>
+    {# <table id="example" class="table table-striped">
     <tr>
       <th style="font-size: 15px">Name</th>
     </tr>
@@ -13,23 +62,25 @@
     {% for d in data %}
       <tr>
         <td style="font-size: 16px"><a href="/edit_character/{{d[1]}}">{{d[0]}}</td>
-        {# <td style="font-size: 16px">{{result.merchantName}}</td>
-        <td style="font-size: 16px">{{result.amount}}</td>
-        <td style="font-size: 16px">{{result.category}}</td>
-        {# <td><a href="view_reciept/{{article.id}}" style="background-color:#192061;color:white" class="btn btn-default pull-right">View</a></td> #}
-        {# <td>
-          <form  action="{{url_for('delete_article', id=article.id)}}" method="post">
-            <input type="hidden" name="_method" value="DELETE">
-            <input style="background-color:#f7b600; color:black" type="submit" value="Delete" class="btn btn-danger">
-          </form>
-        </td> #}
       </tr>
     {% endfor %}
     <tr>
       <td><a href="add_character/" class="btn btn-default pull-right">Add New Character</a></td>
     </tr>
 
-    </table>
+    </table> #}
+
+    <div id="character-container">
+  <h2>Character Select</h2>
+  <div id="character-box"></div>
+  {% for d in data %}
+  <img src="http://vignette2.wikia.nocookie.net/simpsons/images/7/75/Mario.png/revision/latest?cb=20100202173945" onclick="mario()"></img>
+  <td style="font-size: 16px"><a href="/edit_character/{{d[1]}}">{{d[0]}}</td>
+    <audio id="mario-audio" src="http://themushroomkingdom.net/sounds/wav/sm64/sm64_mario_haha.wav" ></audio>
+{% endfor %}
+  </div>
+        <td><a href="add_character/" class="btn btn-default pull-right">Add New Character</a></td>
+
     <div style="width: 20%; float:left">
 
 <canvas id="chart" width="600" height="400"></canvas>
