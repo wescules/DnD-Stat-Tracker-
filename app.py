@@ -266,24 +266,16 @@ def character_sheet(id):
     # traits.insert({'ap': 3, 'description': 'some description', 'name': 'some name'})
     character = getDocumentById(id, characters.all())[0]
 
-    result = traits.all()
-    ap = getFieldData("ap", result)
-    description = getFieldData("description", result)
-    name = getFieldData("name", result)
-    effect = getFieldData('effect', result)
+    stats = character['stats']
 
-    columns = zip(ap, description, name, effect)
-    if request.method == 'POST':
-        quantity = request.form['text']
-        effects = literal_eval(request.form['effect'])      # turn unicode to dict
+    keys = []
+    values = []
 
-        # update the character based on quantity of trait allocated
-        for key in effects:
-            character['stats'][key] = quantity * effects[key]
-        characters.write_back([character])
+    for key in stats:
+        keys.append(key)
+        values.append(stats[key])
 
-        flash('Added Traits', 'success')
-        flash(character, 'success')
+    columns = zip(keys, values)
 
     return render_template('character.html', columns=columns, id=id)
 
