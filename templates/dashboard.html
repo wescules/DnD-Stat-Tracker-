@@ -1,170 +1,431 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<!-- if user is  an admin -->
-    <h1> S0ul F0rg3<small> Welcome, {{session.username}}</small></h1>
-    <hr>
-    <p><strong></strong></p>
-    <style>
-    @import url(https://fonts.googleapis.com/css?family=Orbitron:400,500,900,700);
-body {
-  font-family: 'Orbitron', sans-serif;
-}
+<div id="wrapper">
+  {% from "includes/_formhelpers.html" import render_field %}
+  <div class="overlay"></div>
 
-h2 {
-  color: green;
-  text-align: center;
-  font-size: 3em;
-}
+  <!-- Sidebar -->
+  <style>
+    @import "https://designmodo.github.io/Flat-UI/dist/css/flat-ui.min.css";
 
-#character-container {
-  padding: 10px;
-  width: 1000px;
-  height: 600px;
-  background-color: rgba(0, 0, 0, 0.9);
-  box-sizing: border-box;
-  margin: 0 auto;
-}
+@import "https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css";
 
-#character-box {
-  width: 300px;
-  height: 370px;
+@import "https://daneden.github.io/animate.css/animate.min.css";
+/*-------------------------------*/
+/*           VARIABLES           */
+/*-------------------------------*/
+.column {
   float: left;
-  border-radius: 5px;
-  border: 1px solid black;
-  background-color: green;
-  background-image: url('http://vignette2.wikia.nocookie.net/simpsons/images/7/75/Mario.png/revision/latest?cb=20100202173945');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  box-sizing: border-box;
-  margin-right: 50px;
+  width: 33.33%;
 }
 
-#character-container img {
-  height: 150px;
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+body {
+  position: relative;
+  overflow-x: hidden;
+}
+body,
+html {
+  height: 100%;
+  background-color: #583e7e;
+}
+.nav .open > a {
+  background-color: transparent;
+}
+.nav .open > a:hover {
+  background-color: transparent;
+}
+.nav .open > a:focus {
+  background-color: transparent;
+}
+/*-------------------------------*/
+/*           Wrappers            */
+/*-------------------------------*/
+#wrapper {
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  -webkit-transition: all 0.5s ease;
+  padding-left: 0;
+  transition: all 0.5s ease;
+}
+#wrapper.toggled {
+  padding-left: 220px;
+}
+#wrapper.toggled #sidebar-wrapper {
+  width: 220px;
+}
+#wrapper.toggled #page-content-wrapper {
+  margin-right: -220px;
+  position: absolute;
+}
+#sidebar-wrapper {
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  -webkit-transition: all 0.5s ease;
+  background: #1a1a1a;
+  height: 100%;
+  left: 220px;
+  margin-left: -220px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  transition: all 0.5s ease;
+  width: 0;
+  z-index: 1000;
+}
+#sidebar-wrapper::-webkit-scrollbar {
+  display: none;
+}
+#page-content-wrapper {
+  padding-top: 70px;
+  width: 100%;
+}
+/*-------------------------------*/
+/*     Sidebar nav styles        */
+/*-------------------------------*/
+.sidebar-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  width: 220px;
+}
+.sidebar-nav li {
+  display: inline-block;
+  line-height: 20px;
+  position: relative;
+  width: 100%;
+}
+.sidebar-nav li:before {
+  background-color: #1c1c1c;
+  content: '';
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  transition: width 0.2s ease-in;
+  width: 3px;
+  z-index: -1;
+}
+.sidebar-nav li:first-child a {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+.sidebar-nav li:nth-child(2):before {
+  background-color: #402d5c;
+}
+.sidebar-nav li:nth-child(3):before {
+  background-color: #4c366d;
+}
+.sidebar-nav li:nth-child(4):before {
+  background-color: #583e7e;
+}
+.sidebar-nav li:nth-child(5):before {
+  background-color: #64468f;
+}
+.sidebar-nav li:nth-child(6):before {
+  background-color: #704fa0;
+}
+.sidebar-nav li:nth-child(7):before {
+  background-color: #7c5aae;
+}
+.sidebar-nav li:nth-child(8):before {
+  background-color: #8a6cb6;
+}
+.sidebar-nav li:nth-child(9):before {
+  background-color: #987dbf;
+}
+.sidebar-nav li:hover:before {
+  transition: width 0.2s ease-in;
+  width: 100%;
+}
+.sidebar-nav li a {
+  color: #dddddd;
+  display: block;
+  padding: 10px 15px 10px 30px;
+  text-decoration: none;
+}
+.sidebar-nav li.open:hover before {
+  transition: width 0.2s ease-in;
+  width: 100%;
+}
+.sidebar-nav .dropdown-menu {
+  background-color: #222222;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  width: 100%;
+}
+.sidebar-nav li a:hover,
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus,
+.sidebar-nav li.open a:hover,
+.sidebar-nav li.open a:active,
+.sidebar-nav li.open a:focus {
+  background-color: transparent;
+  color: #ffffff;
+  text-decoration: none;
+}
+.sidebar-nav > .sidebar-brand {
+  font-size: 20px;
+  height: 65px;
+  line-height: 44px;
+}
+/*-------------------------------*/
+/*       Hamburger-Cross         */
+/*-------------------------------*/
+.hamburger {
+  background: #583e7e;
+  border: none;
+  display: block;
+  height: 32px;
+  margin-left: -195px;
+  position: fixed;
+  top: 20px;
+  width: 32px;
+  z-index: 999;
+}
+.hamburger:hover {
+  outline: none;
+}
+.hamburger:focus {
+  outline: none;
+}
+.hamburger:active {
+  outline: none;
+}
+.hamburger.is-closed:before {
+  -webkit-transform: translate3d(0, 0, 0);
+  -webkit-transition: all 0.35s ease-in-out;
+  color: #ffffff;
+  content: '';
+  display: block;
+  font-size: 14px;
+  line-height: 32px;
+  opacity: 0;
+  text-align: center;
   width: 100px;
-  border: 3px groove green;
-  padding: 10px;
-  margin: 2.5px;
+}
+.hamburger.is-closed:hover before {
+  -webkit-transform: translate3d(-100px, 0, 0);
+  -webkit-transition: all 0.35s ease-in-out;
+  display: block;
+  opacity: 1;
+}
+.hamburger.is-closed:hover .hamb-top {
+  -webkit-transition: all 0.35s ease-in-out;
+  top: 0;
+}
+.hamburger.is-closed:hover .hamb-bottom {
+  -webkit-transition: all 0.35s ease-in-out;
+  bottom: 0;
+}
+.hamburger.is-closed .hamb-top {
+  -webkit-transition: all 0.35s ease-in-out;
+  background-color: rgba(255, 255, 255, 0.7);
+  top: 5px;
+}
+.hamburger.is-closed .hamb-middle {
+  background-color: rgba(255, 255, 255, 0.7);
+  margin-top: -2px;
+  top: 50%;
+}
+.hamburger.is-closed .hamb-bottom {
+  -webkit-transition: all 0.35s ease-in-out;
+  background-color: rgba(255, 255, 255, 0.7);
+  bottom: 5px;
+}
+.hamburger.is-closed .hamb-top,
+.hamburger.is-closed .hamb-middle,
+.hamburger.is-closed .hamb-bottom,
+.hamburger.is-open .hamb-top,
+.hamburger.is-open .hamb-middle,
+.hamburger.is-open .hamb-bottom {
+  height: 4px;
+  left: 0;
+  position: absolute;
+  width: 100%;
+}
+.hamburger.is-open .hamb-top {
+  -webkit-transform: rotate(45deg);
+  -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.73, 1, 0.28, 0.08);
+  background-color: #ffffff;
+  margin-top: -2px;
+  top: 50%;
+}
+.hamburger.is-open .hamb-middle {
+  background-color: #ffffff;
+  display: none;
+}
+.hamburger.is-open .hamb-bottom {
+  -webkit-transform: rotate(-45deg);
+  -webkit-transition: -webkit-transform 0.2s cubic-bezier(0.73, 1, 0.28, 0.08);
+  background-color: #ffffff;
+  margin-top: -2px;
+  top: 50%;
+}
+.hamburger.is-open:before {
+  -webkit-transform: translate3d(0, 0, 0);
+  -webkit-transition: all 0.35s ease-in-out;
+  color: #ffffff;
+  content: '';
+  display: block;
+  font-size: 14px;
+  line-height: 32px;
+  opacity: 0;
+  text-align: center;
+  width: 100px;
+}
+.hamburger.is-open:hover before {
+  -webkit-transform: translate3d(-100px, 0, 0);
+  -webkit-transition: all 0.35s ease-in-out;
+  display: block;
+  opacity: 1;
+}
+/*-------------------------------*/
+/*          Dark Overlay         */
+/*-------------------------------*/
+.overlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+/* SOME DEMO STYLES - NOT REQUIRED */
+body,
+html {
+  background-color: #583e7e;
+}
+body h1,
+body h2,
+body h3,
+body h4 {
+  color: rgba(255, 255, 255, 0.9);
+}
+body p,
+body blockquote {
+  color: rgba(255, 255, 255, 0.7);
+}
+body a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: underline;
+}
+body a:hover {
+  color: #ffffff;
 }
 
-#character-container img:hover {
-  border-color: blue;
-  box-shadow: 0 0 5px blue;
-}
-</style>
-    {# <table id="example" class="table table-striped">
-    <tr>
-      <th style="font-size: 15px">Name</th>
-    </tr>
-    <a href="https://medium.com/algorithms-and-leetcode/backtracking-e001561b9f28" style="background-color:#192061;color:white" class="btn btn-default pull-right">Link to book</a>
-    {% for d in data %}
-      <tr>
-        <td style="font-size: 16px"><a href="/edit_character/{{d[1]}}">{{d[0]}}</td>
-      </tr>
-    {% endfor %}
-    <tr>
-      <td><a href="add_character/" class="btn btn-default pull-right">Add New Character</a></td>
-    </tr>
+  </style>
+  <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
+    <ul class="nav sidebar-nav">
+      <li class="sidebar-brand">
+        <a href="#">
+          Funner Retro
+        </a>
+      </li>
+      {% for retroItem in data %}
+      <li>
+        <a href="{{retroItem[1]}}"><i class="fa fa-fw fa-home"></i> Home {{retroItem[1]}}</a>
+      </li>
 
-    </table> #}
+      {% endfor %}
 
-    <div id="character-container">
-  <h2>Character Select</h2>
-  <div id="character-box"></div>
-  {% for d in data %}
-  <img src="http://vignette2.wikia.nocookie.net/simpsons/images/7/75/Mario.png/revision/latest?cb=20100202173945" onclick="mario()"></img>
-  <td style="font-size: 16px"><a href="/edit_character/{{d[1]}}">{{d[0]}}</td>
-    <audio id="mario-audio" src="http://themushroomkingdom.net/sounds/wav/sm64/sm64_mario_haha.wav" ></audio>
-{% endfor %}
-  </div>
-        <td><a href="add_character/" class="btn btn-default pull-right">Add New Character</a></td>
+      <!-- <li>
+              <a href="#"><i class="fa fa-fw fa-home"></i> Home</a>
+          </li>
+          <li>
+              <a href="#"><i class="fa fa-fw fa-folder"></i> Page one</a>
+          </li>
+          <li>
+              <a href="#"><i class="fa fa-fw fa-file-o"></i> Second page</a>
+          </li>
+          <li>
+              <a href="#"><i class="fa fa-fw fa-cog"></i> Third page</a>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw fa-plus"></i> Dropdown <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+              <li class="dropdown-header">Dropdown heading</li>
+              <li><a href="#">Action</a></li>
+              <li><a href="#">Another action</a></li>
+              <li><a href="#">Something else here</a></li>
+              <li><a href="#">Separated link</a></li>
+              <li><a href="#">One more separated link</a></li>
+            </ul>
+          </li>
+          <li>
+              <a href="#"><i class="fa fa-fw fa-bank"></i> Page four</a>
+          </li>
+          <li>
+              <a href="#"><i class="fa fa-fw fa-dropbox"></i> Page 5</a>
+          </li>
+          <li>
+              <a href="#"><i class="fa fa-fw fa-twitter"></i> Last page</a>
+          </li> -->
+    </ul>
+  </nav>
+  <!-- /#sidebar-wrapper -->
 
-    <div style="width: 20%; float:left">
-
-<canvas id="chart" width="600" height="400"></canvas>
-</div>
-    <script>
-    var colors = [
-    "#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA",
-    "#ABCDEF", "#DDDDDD", "#ABCABC", "#4169E1",
-    "#C71585", "#FF4500", "#FEDCBA", "#46BFBD"]
-    var i = 0;
-      var pieData = [
-        {% for art in graphs %}
-          {
-            value: {{art.count}},
-            label: "{{art.category}}",
-            color : colors[i++]
-          },
-        {% endfor %}
-      ];
-      // get bar chart canvas
-      var mychart = document.getElementById("chart").getContext("2d");
-      steps = 10
-      max = {{ max }}
-      // draw pie chart
-      new Chart(document.getElementById("chart").getContext("2d")).Pie(pieData);
-    </script>
-    <div style="width: 50%; float:right; padding-top: 50px">
-    <table id="example1" class="table table-striped" align = "right">
-    {% for article in graphs %}
-      <tr>
-        <td style= "background-color:{{colors[loop.index0]}};"></td>
-        <td>{{article.category}}</td>
-      </tr>
-    {% endfor %}
-    </table>
+  <!-- Page Content -->
+  <div id="page-content-wrapper">
+    <button type="button" class="hamburger is-closed animated fadeInLeft" data-toggle="offcanvas">
+      <span class="hamb-top"></span>
+      <span class="hamb-middle"></span>
+      <span class="hamb-bottom"></span>
+    </button>
+    <div class="container">
+      <form method="POST" action="">
+        <div class="column">
+          <p style="font: size 20;">Went Well</p>
+          {% for item in wentWell %}
+          <div class="row">
+            <p>{{item}}</p>
+          </div>
+          {% endfor %}
+          <input name="add_wentWell" placeholder="Enter your thoughts">
+          <a href="/add_wentWell/{{id}}"><input class="btn btn-primary" type="submit" value=" + ADD more"></a>
+        </div>
+        <div class="column">
+          <p style="font: size 20;">To Improve</p>
+          {% for item in toImprove %}
+          <div class="row">
+            <p>{{item}}</p>
+          </div>
+          {% endfor %}
+          <input name="add_toImprove" placeholder="Enter your thoughts">
+          <a href="/add_toImprove/{{id}}"><input class="btn btn-primary" type="submit" value=" + ADD more"></a>
+        </div>
+        <div class="column">
+          <p style="font: size 20;">Action Items</p>
+          {% for item in actionItems %}
+          <div class="row">
+            <p>{{item}}</p>
+          </div>
+          {% endfor %}
+          <input name="add_actionItems" placeholder="Enter your thoughts">
+          <a href="/add_actionItems/{{id}}"><input class="btn btn-primary" type="submit" value=" + ADD more"></a>
+        </div>
     </div>
-  
+  </div>
+</div>
+<!-- /#page-content-wrapper -->
 
+</div>
+<!-- /#wrapper -->
 
-    <div style="width: 100%;position: relative; padding-top: 450px;margin: auto; width: 50%;">
-   <canvas id="linegraph" width="600" height="400"></canvas>
-   </div>
-    <script>
-      // bar chart data
-      var barData = {
-        labels : [
-          "JAN","FEB","MAR","APR","MAY","JUN"
-        ],
-        datasets : [{
-          fillColor: "rgba(151,187,205,0.2)",
-          strokeColor: "rgba(151,187,205,1)",
-          pointColor: "rgba(151,187,205,1)",
-          pointStrokeColor: "#fff",
-          pointHighlightFill: "#fff",
-          pointHighlightStroke: "rgba(151,187,205,1)",
-          bezierCurve : false,
-          data : [173.23,230.43,340.23,142.23,50.20,600.23]
-          }
-	]
-      }
-      Chart.defaults.global.animationSteps = 50;
-      Chart.defaults.global.tooltipYPadding = 16;
-      Chart.defaults.global.tooltipCornerRadius = 0;
-      Chart.defaults.global.tooltipTitleFontStyle = "normal";
-      Chart.defaults.global.tooltipFillColor = "rgba(0,0,0,0.8)";
-      Chart.defaults.global.animationEasing = "easeOutBounce";
-      Chart.defaults.global.responsive = false;
-      Chart.defaults.global.scaleLineColor = "black";
-      Chart.defaults.global.scaleFontSize = 16;
-      // get bar chart canvas
-      var mychart = document.getElementById("linegraph").getContext("2d");
-      steps = 10
-      max = {{ max }}
-      // draw bar chart
-      var LineChartDemo = new Chart(mychart).Line(barData, {
-        scaleOverride: true,
-        scaleSteps: steps,
-        scaleStepWidth: Math.ceil(max / steps),
-        scaleStartValue: 0,
-        scaleShowVerticalLines: true,
-        scaleShowGridLines : true,
-        barShowStroke : true,
-        scaleShowLabels: true,
-        bezierCurve: false,
-      });
-    </script>
 {% endblock %}

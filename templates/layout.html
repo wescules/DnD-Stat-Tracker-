@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Soul Forge</title>
+    <title>Funner Retro</title>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
@@ -47,42 +47,40 @@
     <script type="text/javascript">
       CKEDITOR.replace('editor')
     </script>
-  <script>
-  $('svg').click(function(){
-  let d4 = Math.floor(Math.random() * 4) + 1;
-  let d6 = Math.floor(Math.random() * 6) + 1;
-  let d8 = Math.floor(Math.random() * 8) + 1;
-  let d10 = Math.floor(Math.random() * 10) + 1;
-  let d12 = Math.floor(Math.random() * 12) + 1;
-  let d20 = Math.floor(Math.random() * 20) + 1;
-  switch(this.id){
-    case 'd4':
-      $('.roll-result').html(d4);
-    break;
-    case 'd6':
-      $('.roll-result').html(d6);
-    break;
-    case 'd8':
-      $('.roll-result').html(d8);
-    break;
-    case 'd10':
-      $('.roll-result').html(d10);
-    break;
-    case 'd12':
-      $('.roll-result').html(d12);
-    break;
-    case 'd20':
-      $('.roll-result').html(d20);
-    break;
-  }
-})
-  </script>
-  <script>
-  function mario() {
-  document.getElementById("character-box").style.backgroundImage = "url('http://vignette2.wikia.nocookie.net/simpsons/images/7/75/Mario.png/revision/latest?cb=20100202173945')";
-   var audio = document.getElementById("mario-audio");
-   audio.play();
-}
-</script>
+
+
+<!-- JS for sidebar on dashboard -->
+<script>
+  $(document).ready(function () {
+    var trigger = $('.hamburger'),
+        overlay = $('.overlay'),
+       isClosed = false;
+  
+      trigger.click(function () {
+        hamburger_cross();      
+      });
+  
+      function hamburger_cross() {
+  
+        if (isClosed == true) {          
+          overlay.hide();
+          trigger.removeClass('is-open');
+          trigger.addClass('is-closed');
+          isClosed = false;
+        } else {   
+          overlay.show();
+          trigger.removeClass('is-closed');
+          trigger.addClass('is-open');
+          isClosed = true;
+        }
+    }
+    
+    $('[data-toggle="offcanvas"]').click(function () {
+          $('#wrapper').toggleClass('toggled');
+    });  
+  });</script>
+
+
+
   </body>
 </html>

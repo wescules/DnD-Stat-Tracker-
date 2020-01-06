@@ -1,10 +1,12 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, request, logging
+from flask import Flask, render_template, flash, redirect, url_for, session, request, logging, json
 from ast import literal_eval
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from functools import wraps
 from tinydb import TinyDB, Query
 
+
+notes = TinyDB('notes.json')
 users = TinyDB('users.json')
 characters = TinyDB('characters.json')
 traits = TinyDB('traits.json')
@@ -60,6 +62,14 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
+def getArrayFromField(fieldName, query):
+    result = []
+    q = query[0]
+    for key in q:
+        if(fieldName == key):
+            return (q[key])
+    return result
+
 def getFieldData(fieldName, query):
     result = [str(r[fieldName]) for r in query]
     return result
@@ -91,7 +101,7 @@ def login():
                 session['username'] = username
 
                 flash('You are now logged in', 'success')
-                return redirect(url_for('dashboard'))
+                return redirect(url_for('dashboard', id=1))
             else:
                 error = 'Invalid login'
                 return render_template('login.html', error=error)
@@ -121,21 +131,52 @@ def logout():
     return redirect(url_for('login'))
 
 
-
-# Dashboard
-@app.route('/dashboard')
+@app.route('/add_wentWell/<string:id>')
 @is_logged_in
-def dashboard():
-    Characters = Query()
-    result = characters.search(Characters.username == session["username"])
-    # characters.insert({'name': 'wescules', 'sex': "Male", 'race': 'asian', 'username': 'wescules'})
-
+def add_wentWell(id):
+    result = notes.all()
     names = getFieldData("name", result)
     ids = getIds(result)
     data = zip(names, ids)
 
+    currentNote = getDocumentById(id, result)[0]
+    # wentWell = getArrayFromField("wentWell", getDocumentById(id, result))
+    # toImprove = getArrayFromField("toImprove", getDocumentById(id, result))
+    # actionItems = getArrayFromField("actionItems", getDocumentById(id, result))
+    if request.method == 'POST':
+        quantity = request.form['add_wentWell']
+        print(quantity)
+
+    # update the character based on quantity of trait allocated
+    # for key in effects:
+    #     currentNote[key] = 
+    # notes.write_back([currentNote])
+
+        flash('Added Traits', 'success')
+
     if len(result) > 0:
-        return render_template('dashboard.html', data=data)
+        return redirect(url_for('dashboard', id=id))
+    else:
+        msg = 'No Articles Found'
+        return render_template('dashboard.html', msg=msg)
+
+
+# Dashboard
+@app.route('/dashboard/<string:id>')
+@is_logged_in
+def dashboard(id):
+    result = notes.all()
+    names = getFieldData("name", result)
+    ids = getIds(result)
+    data = zip(names, ids)
+
+    currentNote = getDocumentById(id, result)[0]
+    wentWell = getArrayFromField("wentWell", getDocumentById(id, result))
+    toImprove = getArrayFromField("toImprove", getDocumentById(id, result))
+    actionItems = getArrayFromField("actionItems", getDocumentById(id, result))
+
+    if len(result) > 0:
+        return render_template('dashboard.html', data=data, wentWell=wentWell, toImprove=toImprove, actionItems=actionItems, id=id)
     else:
         msg = 'No Articles Found'
         return render_template('dashboard.html', msg=msg)
