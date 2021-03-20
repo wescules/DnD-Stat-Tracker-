@@ -8,7 +8,7 @@ cryptography==2.1.4
 Flask==1.0.3
 Flask-WTF==0.14.2
 gunicorn==19.10.0
-Jinja2==2.10.1
+Jinja2==2.11.3
 passlib==1.7.1
 pylint==1.9.4
 rsa==4.0
