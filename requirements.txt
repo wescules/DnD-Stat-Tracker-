@@ -15,6 +15,6 @@ rsa==4.0
 SecretStorage==2.3.1
 tinydb==3.15.2
 virtualenv==16.7.9
-Werkzeug==0.15.4
+Werkzeug==0.15.5
 wrapt==1.11.1
 WTForms==2.2.1
